@@ -6,6 +6,9 @@
 - include: Debian.yml
   when: ansible_os_family == 'Debian'
 
+- include: RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
 - include: install_package_name.yml
 
 - name: Check for license key
@@ -18,7 +21,7 @@
   register: grep_result
 
 - name: Add license key to config file
-  command: nrsysmond-config --set license_key={{newrelic_sysmond_license_key}}
+  command: /usr/sbin/nrsysmond-config --set license_key={{newrelic_sysmond_license_key}}
   sudo: True
   notify:
     restart newrelic-sysmond

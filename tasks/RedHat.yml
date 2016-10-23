@@ -1,0 +1,19 @@
+---
+- name: check if {{newrelic_repo_rpm_name}} exists
+  command: rpm -q {{newrelic_repo_rpm_name}}
+  changed_when: False
+  ignore_errors: True
+  register: package_exists_result
+
+# yum does not download http in centos 5, so we use rpm
+- name: install {{newrelic_repo_rpm}} with default package manager
+  command: rpm -Uvh {{newrelic_repo_rpm}}
+  sudo: yes
+  when: package_exists_result|failed
+
+## Handle dnf case for Fedora
+## Use command since dnf was only added as a module in ansible 1.9.0
+#- name: install {{newrelic_repo_rpm}} with dnf
+#  command: dnf install -y {{newrelic_repo_rpm}}
+#  sudo: yes
+#  when: backcompat_pkg_mgr == "dnf" and package_exists_result|failed

@@ -1,0 +1,4 @@
+---
+newrelic_repo_rpm: http://download.newrelic.com/pub/newrelic/el5/i386/newrelic-repo-5-3.noarch.rpm
+newrelic_repo_rpm_name: newrelic-repo-5-3
+package_name: newrelic-sysmond
