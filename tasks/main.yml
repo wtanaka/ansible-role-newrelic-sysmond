@@ -1,0 +1,30 @@
+---
+- include: compat.yml
+
+- include: Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include_vars: "{{item}}"
+  with_first_found:
+  - "../vars/{{ansible_distribution}}-{{ansible_distribution_major_version | int}}.yml"
+  - "../vars/{{ansible_distribution}}.yml"
+  - "../vars/{{ansible_os_family}}.yml"
+  - "../vars/default.yml"
+
+- include: install_package_name.yml
+
+- name: Check for license key
+  sudo: True
+  command: >
+    grep license_key={{newrelic_sysmond_license_key}}
+    /etc/newrelic/nrsysmond.cfg
+  changed_when: False
+  ignore_errors: True
+  register: grep_result
+
+- name: Add license key to config file
+  command: nrsysmond-config --set license_key={{newrelic_sysmond_license_key}}
+  sudo: True
+  notify:
+    restart newrelic-sysmond
+  when: grep_result|failed
