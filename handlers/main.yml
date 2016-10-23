@@ -1,4 +1,10 @@
 ---
 - name: restart newrelic-sysmond
+# Does not work in CentOS7
+# https://github.com/docker/docker/issues/7459
   service: name=newrelic-sysmond state=restarted
   sudo: True
+  when: >
+    (is_integration_test is not defined or not is_integration_test) or
+    (ansible_distribution == "CentOS" and
+    ansible_distribution_version == "7")
