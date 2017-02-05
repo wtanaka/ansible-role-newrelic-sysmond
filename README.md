@@ -13,6 +13,11 @@ Example Playbook
       roles:
          - role: wtanaka.newrelic-sysmond
 
+Variables
+---------
+
+`newrelic_sysmond_license_key: YOUR_LICENSE_HERE_YOUR_LICENSE_HERE_YOUR`
+
 License
 -------
 
